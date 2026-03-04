@@ -1,0 +1,102 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: data-agent-postgres
+    environment:
+      POSTGRES_USER: dataagent
+      POSTGRES_PASSWORD: dataagent123
+      POSTGRES_DB: dataagent
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dataagent -d dataagent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ChromaDB Vector Store
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: data-agent-chromadb
+    volumes:
+      - chromadb_data:/chroma/chroma
+    ports:
+      - "8001:8000"
+    environment:
+      - ANONYMIZED_TELEMETRY=false
+    restart: unless-stopped
+
+  # Python Agent Service
+  agent-service:
+    build:
+      context: ./agent-service
+      dockerfile: Dockerfile
+    container_name: data-agent-service
+    environment:
+      - LLM_API_KEY=${LLM_API_KEY:-your-api-key-here}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
+      - LLM_MODEL=${LLM_MODEL:-qwen-plus}
+      - DATABASE_URL=postgresql://dataagent:dataagent123@postgres:5432/dataagent
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      chromadb:
+        condition: service_started
+    restart: unless-stopped
+
+  # Next.js Frontend (Production)
+  data-agent:
+    build: .
+    container_name: data-agent
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://dataagent:dataagent123@postgres:5432/dataagent
+      - AGENT_SERVICE_URL=http://agent-service:8000
+      - LLM_API_KEY=${LLM_API_KEY:-your-api-key-here}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
+      - LLM_MODEL=${LLM_MODEL:-qwen-plus}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      agent-service:
+        condition: service_started
+    restart: unless-stopped
+
+  # Next.js Frontend (Development)
+  data-agent-dev:
+    image: node:22-alpine
+    container_name: data-agent-dev
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgresql://dataagent:dataagent123@postgres:5432/dataagent
+      - AGENT_SERVICE_URL=http://agent-service:8000
+      - LLM_API_KEY=${LLM_API_KEY:-your-api-key-here}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
+      - LLM_MODEL=${LLM_MODEL:-qwen-plus}
+    command: sh -c "npm install && npx prisma generate && npm run dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - dev
+
+volumes:
+  postgres_data:
+  chromadb_data:

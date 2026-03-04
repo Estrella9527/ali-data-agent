@@ -1,0 +1,128 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============== 会话相关 ==============
+model Session {
+  id              String          @id @default(cuid())
+  title           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  userId          String?
+
+  messages        Message[]
+  dataContexts    SessionDataContext[]
+
+  @@map("sessions")
+}
+
+model Message {
+  id              String          @id @default(cuid())
+  sessionId       String
+  role            String          // "user" | "assistant" | "system" | "tool"
+  content         String          @db.Text
+  metadata        Json?           // 存储额外信息如 tool_calls, tokens 等
+  createdAt       DateTime        @default(now())
+
+  session         Session         @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("messages")
+}
+
+// ============== 数据源相关 ==============
+model DataSource {
+  id              String          @id @default(cuid())
+  name            String
+  type            String          // "rds" | "polardb" | "adb" | "file"
+  config          Json            // 加密存储连接信息
+  isBuiltin       Boolean         @default(false)
+  description     String?         @db.Text
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  tables          DataTable[]
+  sessionContexts SessionDataContext[]
+
+  @@map("data_sources")
+}
+
+model DataTable {
+  id              String          @id @default(cuid())
+  dataSourceId    String
+  name            String
+  description     String?         @db.Text
+  schema          Json?           // 表结构元数据
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  dataSource      DataSource      @relation(fields: [dataSourceId], references: [id], onDelete: Cascade)
+
+  @@unique([dataSourceId, name])
+  @@map("data_tables")
+}
+
+// 会话与数据源的关联
+model SessionDataContext {
+  id              String          @id @default(cuid())
+  sessionId       String
+  dataSourceId    String
+
+  session         Session         @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  dataSource      DataSource      @relation(fields: [dataSourceId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, dataSourceId])
+  @@map("session_data_contexts")
+}
+
+// ============== 记忆系统 ==============
+model Memory {
+  id              String          @id @default(cuid())
+  content         String          @db.Text
+  source          String          // "auto" | "user_confirmed" | "manual"
+  heat            Int             @default(0)
+  status          String          @default("active") // "active" | "disabled"
+  embedding       Json?           // 向量嵌入存储
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("memories")
+}
+
+// ============== 自定义 Agent ==============
+model CustomAgent {
+  id              String          @id @default(cuid())
+  name            String
+  description     String?         @db.Text
+  instruction     String?         @db.Text
+  knowledge       String?         @db.Text
+  config          Json?           // 执行配置
+  isPublished     Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("custom_agents")
+}
+
+// ============== 上传文件 ==============
+model UploadedFile {
+  id              String          @id @default(cuid())
+  filename        String
+  originalName    String
+  mimeType        String
+  size            Int
+  path            String
+  status          String          @default("processing") // "processing" | "ready" | "error"
+  metadata        Json?
+  createdAt       DateTime        @default(now())
+
+  @@map("uploaded_files")
+}
