@@ -38,8 +38,8 @@ services:
     container_name: data-agent-service
     environment:
       - LLM_API_KEY=${LLM_API_KEY:-your-api-key-here}
-      - LLM_BASE_URL=${LLM_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
-      - LLM_MODEL=${LLM_MODEL:-qwen-plus}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.openai.com/v1}
+      - LLM_MODEL=${LLM_MODEL:-gpt-3.5-turbo}
       - DATABASE_URL=postgresql://dataagent:dataagent123@postgres:5432/dataagent
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
@@ -64,8 +64,8 @@ services:
       - DATABASE_URL=postgresql://dataagent:dataagent123@postgres:5432/dataagent
       - AGENT_SERVICE_URL=http://agent-service:8000
       - LLM_API_KEY=${LLM_API_KEY:-your-api-key-here}
-      - LLM_BASE_URL=${LLM_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
-      - LLM_MODEL=${LLM_MODEL:-qwen-plus}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.openai.com/v1}
+      - LLM_MODEL=${LLM_MODEL:-gpt-3.5-turbo}
     depends_on:
       postgres:
         condition: service_healthy
@@ -88,8 +88,8 @@ services:
       - DATABASE_URL=postgresql://dataagent:dataagent123@postgres:5432/dataagent
       - AGENT_SERVICE_URL=http://agent-service:8000
       - LLM_API_KEY=${LLM_API_KEY:-your-api-key-here}
-      - LLM_BASE_URL=${LLM_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
-      - LLM_MODEL=${LLM_MODEL:-qwen-plus}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.openai.com/v1}
+      - LLM_MODEL=${LLM_MODEL:-gpt-3.5-turbo}
     command: sh -c "npm install && npx prisma generate && npm run dev"
     depends_on:
       postgres:

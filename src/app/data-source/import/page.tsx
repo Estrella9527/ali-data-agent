@@ -202,7 +202,7 @@ export default function ImportPage() {
                       </label>
                       <Input
                         type="text"
-                        placeholder="例如: rm-bp1xxxxx.mysql.rds.aliyuncs.com"
+                        placeholder="例如: db.example.com"
                         className="h-9 text-sm"
                       />
                     </div>
