@@ -9,7 +9,7 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children, showSidebar = true }: AppLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {showSidebar && <Sidebar />}
       <main className={showSidebar ? 'ml-[260px]' : ''}>{children}</main>
     </div>

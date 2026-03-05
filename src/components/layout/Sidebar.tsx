@@ -12,6 +12,7 @@ import {
   Command,
   Plus,
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const navItems = [
   { label: '数据中心', icon: LayoutGrid, href: '/data-source' },
@@ -29,37 +30,40 @@ export default function Sidebar() {
     return pathname === href || pathname.startsWith(href + '/');
   };
 
-  const isHomePage = pathname === '/' || pathname.startsWith('/session');
-
   return (
-    <aside className="fixed left-0 top-0 h-full w-[260px] bg-white border-r border-gray-200 flex flex-col z-50">
+    <aside className="fixed left-0 top-0 h-full w-[260px] bg-sidebar-background border-r border-sidebar-border flex flex-col z-50">
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-gray-100">
+      <div className="px-5 py-5 border-b border-sidebar-border">
         <Link href="/" className="flex items-center gap-3 mb-5">
-          <div className="w-8 h-8 rounded-md bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center text-white font-bold text-base shadow-sm">
+          <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-base shadow-sm">
             D
           </div>
-          <span className="text-sm font-semibold text-gray-800">Data Agent</span>
+          <span className="text-sm font-semibold text-sidebar-foreground">Data Agent</span>
         </Link>
 
         {/* User Space */}
-        <button className="w-full flex items-center justify-between px-3 py-2.5 bg-gray-50 rounded-md text-sm text-gray-600 hover:bg-gray-100 transition-colors mb-3">
+        <Button
+          variant="ghost"
+          className="w-full justify-between px-3 py-2.5 bg-muted text-muted-foreground hover:bg-accent mb-3"
+        >
           <span>个人空间</span>
           <ChevronDown size={14} />
-        </button>
+        </Button>
 
         {/* New Task Button */}
-        <Link
-          href="/"
-          className="w-full flex items-center justify-between px-3 py-2.5 border border-gray-200 rounded-md text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-        >
-          <span className="flex items-center gap-1.5">
-            <Plus size={14} />
-            新任务
-          </span>
-          <span className="flex items-center gap-0.5 text-xs text-gray-400">
-            <Command size={10} />P
-          </span>
+        <Link href="/">
+          <Button
+            variant="outline"
+            className="w-full justify-between px-3 py-2.5"
+          >
+            <span className="flex items-center gap-1.5">
+              <Plus size={14} />
+              新任务
+            </span>
+            <span className="flex items-center gap-0.5 text-xs text-muted-foreground">
+              <Command size={10} />P
+            </span>
+          </Button>
         </Link>
       </div>
 
@@ -74,8 +78,8 @@ export default function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 mx-2 px-3 py-2.5 rounded-md text-sm transition-all border-l-2 ${
                 active
-                  ? 'bg-purple-50 text-purple-600 font-medium border-l-purple-600'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700 border-l-transparent'
+                  ? 'bg-primary/10 text-primary font-medium border-l-primary'
+                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground border-l-transparent'
               }`}
             >
               <Icon size={16} strokeWidth={active ? 2 : 1.5} />

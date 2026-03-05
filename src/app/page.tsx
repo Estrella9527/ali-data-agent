@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { AppLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
 import { TrendingUp, Database, BarChart3, FileSearch, Send, Paperclip } from 'lucide-react';
 
 const quickActions = [
@@ -52,13 +53,13 @@ export default function HomePage() {
       <div className="flex flex-col items-center justify-center min-h-screen px-6 -mt-12">
         {/* Hero */}
         <div className="text-center mb-10 animate-fade-in">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-xl bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+          <div className="w-16 h-16 mx-auto mb-6 rounded-xl bg-primary flex items-center justify-center text-primary-foreground text-2xl font-bold shadow-lg">
             D
           </div>
-          <h1 className="text-2xl font-semibold text-gray-800 mb-3">
-            Hola, I&apos;m <span className="text-purple-600">Data Agent</span>
+          <h1 className="text-2xl font-semibold text-foreground mb-3">
+            Hola, I&apos;m <span className="text-primary">Data Agent</span>
           </h1>
-          <p className="text-gray-500 text-sm max-w-md mx-auto leading-relaxed">
+          <p className="text-muted-foreground text-sm max-w-md mx-auto leading-relaxed">
             智能数据分析助手，通过自然语言对话完成数据查询、分析与可视化
           </p>
         </div>
@@ -68,47 +69,47 @@ export default function HomePage() {
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
-              <button
+              <Card
                 key={action.label}
                 onClick={() => handleSend(action.label)}
-                className="group p-4 bg-white border border-gray-200 rounded-lg hover:border-purple-200 hover:shadow-sm transition-all text-left"
+                className="group p-4 cursor-pointer hover:border-primary/50 hover:shadow-sm transition-all text-left"
               >
-                <div className="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 mb-3 group-hover:bg-purple-100 transition-colors">
+                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-3 group-hover:bg-primary/20 transition-colors">
                   <Icon size={18} />
                 </div>
-                <p className="text-sm font-medium text-gray-700 mb-1">{action.label}</p>
-                <p className="text-xs text-gray-400 line-clamp-2">{action.desc}</p>
-              </button>
+                <p className="text-sm font-medium text-foreground mb-1">{action.label}</p>
+                <p className="text-xs text-muted-foreground line-clamp-2">{action.desc}</p>
+              </Card>
             );
           })}
         </div>
 
         {/* Input Box */}
         <div className="w-full max-w-2xl animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <div className="relative bg-white border border-gray-200 rounded-xl shadow-sm">
+          <Card className="shadow-sm">
             <div className="flex items-center px-4 py-3">
-              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                 <Paperclip size={18} />
-              </button>
-              <input
+              </Button>
+              <Input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="输入您的问题，开始数据分析..."
-                className="flex-1 px-3 py-2 text-sm text-gray-700 placeholder-gray-400 bg-transparent outline-none"
+                className="flex-1 border-0 shadow-none focus-visible:ring-0 px-3"
               />
               <Button
                 onClick={() => handleSend(inputValue)}
                 disabled={!inputValue.trim()}
                 size="sm"
-                className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg px-4"
+                className="rounded-lg px-4"
               >
                 <Send size={16} />
               </Button>
             </div>
-          </div>
-          <p className="text-xs text-gray-400 text-center mt-3">
+          </Card>
+          <p className="text-xs text-muted-foreground text-center mt-3">
             按 Enter 发送，Shift + Enter 换行
           </p>
         </div>

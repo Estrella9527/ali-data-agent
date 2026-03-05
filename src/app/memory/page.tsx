@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
+import { Card } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -121,91 +122,83 @@ export default function MemoryPage() {
       item.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const getSourceBadgeStyle = (source: string) => {
+  const getSourceBadgeVariant = (source: string) => {
     switch (source) {
       case '自动生成':
-        return 'bg-blue-50 text-blue-600 hover:bg-blue-50';
+        return 'secondary';
       case '用户确认':
-        return 'bg-purple-50 text-purple-600 hover:bg-purple-50';
+        return 'default';
       case '用户手动':
-        return 'bg-green-50 text-green-600 hover:bg-green-50';
+        return 'outline';
       default:
-        return 'bg-gray-50 text-gray-600';
+        return 'secondary';
     }
-  };
-
-  const getStatusBadgeStyle = (status: string) => {
-    return status === '生效中'
-      ? 'bg-green-50 text-green-600 hover:bg-green-50'
-      : 'bg-gray-100 text-gray-500 hover:bg-gray-100';
   };
 
   return (
     <AppLayout>
-      <div className="flex flex-col h-screen bg-gray-50">
+      <div className="flex flex-col h-screen bg-background">
         {/* Header */}
-        <div className="px-10 py-7 bg-white border-b border-gray-200 flex items-center gap-3">
-          <ClipboardList size={20} className="text-gray-600" />
-          <h1 className="text-xl font-semibold text-gray-800">记忆管理</h1>
+        <div className="px-10 py-7 bg-card border-b border-border flex items-center gap-3">
+          <ClipboardList size={20} className="text-muted-foreground" />
+          <h1 className="text-xl font-semibold text-foreground">记忆管理</h1>
         </div>
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto px-10 py-8">
           {/* Toggle Cards */}
           <div className="grid grid-cols-2 gap-5 mb-8">
-            <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between">
+            <Card className="p-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="text-xl">
-                  <ClipboardList size={24} className="text-gray-600" />
+                  <ClipboardList size={24} className="text-muted-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-800 mb-1">生成记忆</h3>
-                  <p className="text-xs text-gray-400">让Data Agent自主判断生成记忆</p>
+                  <h3 className="text-sm font-semibold text-foreground mb-1">生成记忆</h3>
+                  <p className="text-xs text-muted-foreground">让Data Agent自主判断生成记忆</p>
                 </div>
               </div>
               <Switch
                 checked={generateMemory}
                 onCheckedChange={setGenerateMemory}
-                className="data-[state=checked]:bg-gray-900"
               />
-            </div>
+            </Card>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between">
+            <Card className="p-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="text-xl">
-                  <ClipboardList size={24} className="text-gray-600" />
+                  <ClipboardList size={24} className="text-muted-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-800 mb-1">使用记忆</h3>
-                  <p className="text-xs text-gray-400">让Data Agent 在回复时使用相关记忆</p>
+                  <h3 className="text-sm font-semibold text-foreground mb-1">使用记忆</h3>
+                  <p className="text-xs text-muted-foreground">让Data Agent 在回复时使用相关记忆</p>
                 </div>
               </div>
               <Switch
                 checked={useMemory}
                 onCheckedChange={setUseMemory}
-                className="data-[state=checked]:bg-gray-900"
               />
-            </div>
+            </Card>
           </div>
 
           {/* Controls */}
           <div className="flex items-center justify-between mb-5">
             <div className="relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="搜索..."
-                className="w-72 pl-9 bg-white border-gray-200 h-9 text-sm"
+                className="w-72 pl-9 h-9 text-sm"
               />
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-1.5 text-gray-600">
+              <Button variant="outline" size="sm" className="gap-1.5">
                 <Trash2 size={14} />
                 删除
               </Button>
-              <Button variant="outline" size="sm" className="gap-1.5 text-gray-600">
+              <Button variant="outline" size="sm" className="gap-1.5">
                 <RefreshCw size={14} />
                 刷新
               </Button>
@@ -213,82 +206,82 @@ export default function MemoryPage() {
           </div>
 
           {/* Table */}
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <Card className="overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50 border-b border-gray-200">
+                <TableRow className="bg-muted/50">
                   <TableHead className="w-10">
-                    <input type="checkbox" className="w-4 h-4 rounded border-gray-300" />
+                    <input type="checkbox" className="w-4 h-4 rounded border-input" />
                   </TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     记忆ID
                   </TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     来源
                   </TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     内容
                   </TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     <span className="flex items-center gap-1">
                       热度 <Info size={10} /> <ArrowUpDown size={10} />
                     </span>
                   </TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     状态
                   </TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     <span className="flex items-center gap-1">
                       创建时间 <ArrowUpDown size={10} />
                     </span>
                   </TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     修改时间
                   </TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-400 uppercase tracking-wide text-right">
+                  <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wide text-right">
                     操作
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredData.map((item) => (
-                  <TableRow key={item.id} className="hover:bg-gray-50 border-b border-gray-100">
+                  <TableRow key={item.id} className="hover:bg-muted/50">
                     <TableCell>
-                      <input type="checkbox" className="w-4 h-4 rounded border-gray-300" />
+                      <input type="checkbox" className="w-4 h-4 rounded border-input" />
                     </TableCell>
-                    <TableCell className="text-xs text-gray-500 font-mono">{item.id}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground font-mono">{item.id}</TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className={getSourceBadgeStyle(item.source)}>
+                      <Badge variant={getSourceBadgeVariant(item.source)}>
                         {item.source}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-sm text-gray-600 max-w-[250px] truncate">
+                    <TableCell className="text-sm text-foreground max-w-[250px] truncate">
                       {item.content}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <div className="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-purple-600 rounded-full"
+                            className="h-full bg-primary rounded-full"
                             style={{ width: `${item.heat}%` }}
                           />
                         </div>
-                        <span className="text-xs text-gray-400 w-6">{item.heat}</span>
+                        <span className="text-xs text-muted-foreground w-6">{item.heat}</span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className={getStatusBadgeStyle(item.status)}>
+                      <Badge variant={item.status === '生效中' ? 'default' : 'secondary'}>
                         {item.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-sm text-gray-500">{item.created}</TableCell>
-                    <TableCell className="text-sm text-gray-500">{item.modified}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{item.created}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{item.modified}</TableCell>
                     <TableCell>
                       <div className="flex items-center justify-end gap-1">
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400 hover:text-gray-600">
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-foreground">
                           <Pencil size={14} />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400 hover:text-red-500">
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive">
                           <Trash2 size={14} />
                         </Button>
                       </div>
@@ -299,16 +292,16 @@ export default function MemoryPage() {
             </Table>
 
             {/* Pagination */}
-            <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between text-xs text-gray-400">
+            <div className="px-4 py-3 bg-muted/50 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
               <span>
-                共 <strong className="text-gray-600">{filteredData.length}</strong> 条记忆
+                共 <strong className="text-foreground">{filteredData.length}</strong> 条记忆
               </span>
               <div className="flex items-center gap-2">
-                <span>每页展示 <strong className="text-gray-600">10</strong> 行</span>
+                <span>每页展示 <strong className="text-foreground">10</strong> 行</span>
                 <Button variant="outline" size="icon" className="h-6 w-6">
                   <ChevronLeft size={12} />
                 </Button>
-                <Button variant="outline" size="icon" className="h-6 w-6 bg-purple-600 text-white border-purple-600">
+                <Button size="icon" className="h-6 w-6">
                   1
                 </Button>
                 <Button variant="outline" size="icon" className="h-6 w-6">
@@ -317,7 +310,7 @@ export default function MemoryPage() {
                 <span>1/1</span>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </AppLayout>

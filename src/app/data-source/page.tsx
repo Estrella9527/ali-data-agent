@@ -6,6 +6,7 @@ import { AppLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -14,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Plus,
   Search,
@@ -62,10 +62,10 @@ export default function DataSourcePage() {
     <AppLayout>
       <div className="flex h-screen overflow-hidden">
         {/* Left Panel - Source List */}
-        <div className="w-[370px] bg-white border-r border-gray-200 flex flex-col">
+        <div className="w-[370px] bg-card border-r border-border flex flex-col">
           {/* Header */}
-          <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 className="text-base font-semibold text-gray-800">数据中心</h2>
+          <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+            <h2 className="text-base font-semibold text-foreground">数据中心</h2>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="icon" className="h-8 w-8">
                 <RefreshCw size={14} />
@@ -79,28 +79,28 @@ export default function DataSourcePage() {
           </div>
 
           {/* Search */}
-          <div className="px-5 py-4 border-b border-gray-200">
+          <div className="px-5 py-4 border-b border-border">
             <div className="relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="搜索"
-                className="pl-9 bg-gray-50 border-gray-200 h-9 text-sm"
+                className="pl-9 h-9 text-sm"
               />
             </div>
           </div>
 
           {/* Tabs */}
-          <div className="px-5 border-b border-gray-200">
+          <div className="px-5 border-b border-border">
             <div className="flex gap-5">
               <button
                 onClick={() => setActiveTab('sources')}
                 className={`py-3 text-sm border-b-2 transition-colors ${
                   activeTab === 'sources'
-                    ? 'text-purple-600 border-purple-600 font-medium'
-                    : 'text-gray-400 border-transparent hover:text-gray-600'
+                    ? 'text-primary border-primary font-medium'
+                    : 'text-muted-foreground border-transparent hover:text-foreground'
                 }`}
               >
                 数据源
@@ -109,8 +109,8 @@ export default function DataSourcePage() {
                 onClick={() => setActiveTab('uploads')}
                 className={`py-3 text-sm border-b-2 transition-colors ${
                   activeTab === 'uploads'
-                    ? 'text-purple-600 border-purple-600 font-medium'
-                    : 'text-gray-400 border-transparent hover:text-gray-600'
+                    ? 'text-primary border-primary font-medium'
+                    : 'text-muted-foreground border-transparent hover:text-foreground'
                 }`}
               >
                 上传的数据
@@ -126,10 +126,10 @@ export default function DataSourcePage() {
                 <button
                   key={ds.id}
                   onClick={() => setSelected(ds.id)}
-                  className={`w-full px-5 py-3 text-left border-b border-gray-100 transition-colors flex items-center gap-2 ${
+                  className={`w-full px-5 py-3 text-left border-b border-border/50 transition-colors flex items-center gap-2 ${
                     selected === ds.id
-                      ? 'bg-purple-50 text-purple-600'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-muted-foreground hover:bg-muted'
                   }`}
                 >
                   <FileText size={14} />
@@ -140,14 +140,14 @@ export default function DataSourcePage() {
         </div>
 
         {/* Right Panel - Detail */}
-        <div className="flex-1 bg-white overflow-y-auto">
+        <div className="flex-1 bg-card overflow-y-auto">
           {current ? (
             <div className="flex flex-col h-full">
               {/* Detail Header */}
-              <div className="px-5 py-5 border-b border-gray-200">
+              <div className="px-5 py-5 border-b border-border">
                 {/* Breadcrumb */}
-                <div className="flex items-center gap-1 text-xs text-gray-400 mb-3">
-                  <button className="text-purple-600 hover:underline">数据中心</button>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground mb-3">
+                  <button className="text-primary hover:underline">数据中心</button>
                   <ChevronRight size={12} />
                   <span className="flex items-center gap-1">
                     <FileText size={12} />
@@ -156,21 +156,21 @@ export default function DataSourcePage() {
                 </div>
 
                 {/* Title */}
-                <h1 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <h1 className="text-2xl font-semibold text-foreground mb-4 flex items-center gap-2">
                   <FileText size={20} />
                   {current.name}
                 </h1>
 
                 {/* Action Buttons */}
                 <div className="flex items-center gap-2 flex-wrap">
-                  <Button variant="outline" size="sm" className="text-red-500 border-red-200 hover:bg-red-50 gap-1">
+                  <Button variant="outline" size="sm" className="text-destructive border-destructive/30 hover:bg-destructive/10 gap-1">
                     <Trash2 size={14} />
                     删除
                   </Button>
                   <Button variant="outline" size="sm">
                     同步知识库
                   </Button>
-                  <Button size="sm" className="bg-gray-900 hover:bg-gray-800 gap-1">
+                  <Button size="sm" className="gap-1">
                     <Plus size={14} />
                     去分析
                   </Button>
@@ -178,41 +178,41 @@ export default function DataSourcePage() {
               </div>
 
               {/* About Section */}
-              <div className="px-5 py-5 border-b border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-800 mb-4">关于此库</h3>
+              <div className="px-5 py-5 border-b border-border">
+                <h3 className="text-sm font-semibold text-foreground mb-4">关于此库</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-gray-400 mb-1">ID</p>
-                    <p className="text-xs text-gray-700 font-mono">{sourceDetail.id}</p>
+                    <p className="text-xs text-muted-foreground mb-1">ID</p>
+                    <p className="text-xs text-foreground font-mono">{sourceDetail.id}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 mb-1">数据源类型</p>
+                    <p className="text-xs text-muted-foreground mb-1">数据源类型</p>
                     <div className="flex gap-2">
-                      <Badge variant="secondary" className="bg-blue-50 text-blue-600 hover:bg-blue-50">
+                      <Badge variant="secondary">
                         {current.type}
                       </Badge>
                       {current.isBuiltin && (
-                        <Badge variant="secondary" className="bg-purple-50 text-purple-600 hover:bg-purple-50">
+                        <Badge variant="default">
                           内置数据
                         </Badge>
                       )}
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 mb-1">创建时间</p>
-                    <p className="text-xs text-gray-700 font-mono">{sourceDetail.created}</p>
+                    <p className="text-xs text-muted-foreground mb-1">创建时间</p>
+                    <p className="text-xs text-foreground font-mono">{sourceDetail.created}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 mb-1">所属实例</p>
-                    <p className="text-xs text-gray-700 font-mono">{sourceDetail.instance}</p>
+                    <p className="text-xs text-muted-foreground mb-1">所属实例</p>
+                    <p className="text-xs text-foreground font-mono">{sourceDetail.instance}</p>
                   </div>
                 </div>
               </div>
 
               {/* Description Section */}
-              <div className="px-5 py-5 border-b border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-800 mb-4">描述</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">
+              <div className="px-5 py-5 border-b border-border">
+                <h3 className="text-sm font-semibold text-foreground mb-4">描述</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   {sourceDetail.description}
                 </p>
               </div>
@@ -220,7 +220,7 @@ export default function DataSourcePage() {
               {/* Tables Section */}
               <div className="px-5 py-5 flex-1 overflow-hidden flex flex-col">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-800">
+                  <h3 className="text-sm font-semibold text-foreground">
                     表 ({tableList.length})
                   </h3>
                   <div className="flex items-center gap-2">
@@ -239,51 +239,51 @@ export default function DataSourcePage() {
                   </div>
                 </div>
 
-                <div className="flex-1 overflow-auto border border-gray-200 rounded-lg">
+                <Card className="flex-1 overflow-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow className="bg-gray-50">
-                        <TableHead className="text-xs font-semibold text-gray-500">名称</TableHead>
-                        <TableHead className="text-xs font-semibold text-gray-500">描述</TableHead>
-                        <TableHead className="text-xs font-semibold text-gray-500">创建时间</TableHead>
-                        <TableHead className="text-xs font-semibold text-gray-500 text-right">操作</TableHead>
+                      <TableRow className="bg-muted/50">
+                        <TableHead className="text-xs font-semibold text-muted-foreground">名称</TableHead>
+                        <TableHead className="text-xs font-semibold text-muted-foreground">描述</TableHead>
+                        <TableHead className="text-xs font-semibold text-muted-foreground">创建时间</TableHead>
+                        <TableHead className="text-xs font-semibold text-muted-foreground text-right">操作</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {tableList
                         .filter((t) => t.name.toLowerCase().includes(tableSearch.toLowerCase()))
                         .map((table) => (
-                          <TableRow key={table.name} className="hover:bg-gray-50">
-                            <TableCell className="text-sm text-gray-700">
+                          <TableRow key={table.name} className="hover:bg-muted/50">
+                            <TableCell className="text-sm text-foreground">
                               <span className="flex items-center gap-2">
-                                <Table2 size={14} className="text-gray-400" />
+                                <Table2 size={14} className="text-muted-foreground" />
                                 {table.name}
                               </span>
                             </TableCell>
-                            <TableCell className="text-sm text-gray-500">{table.desc}</TableCell>
-                            <TableCell className="text-sm text-gray-500">{table.created}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{table.desc}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{table.created}</TableCell>
                             <TableCell className="text-right">
-                              <button className="text-xs text-red-500 hover:underline">
+                              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
                                 删除
-                              </button>
+                              </Button>
                             </TableCell>
                           </TableRow>
                         ))}
                     </TableBody>
                   </Table>
-                </div>
+                </Card>
               </div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center px-6">
-              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                <Database size={32} className="text-gray-400" />
+              <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4">
+                <Database size={32} className="text-muted-foreground" />
               </div>
-              <p className="text-sm text-gray-400 mb-6">
+              <p className="text-sm text-muted-foreground mb-6">
                 请点击添加数据新增数据，从点击左侧已有数据源查看
               </p>
               <Link href="/data-source/import">
-                <Button className="bg-gray-900 hover:bg-gray-800">
+                <Button>
                   添加数据
                 </Button>
               </Link>
